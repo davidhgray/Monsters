@@ -1,3 +1,5 @@
+//this is the version from kayla on slack
+
 package monsters;
 
 import java.util.Random;
@@ -7,7 +9,7 @@ abstract public class Monsters {
     
     public static Random r = new Random();
 
-    private String name;
+    private static String name;
     public int health = 10;
     private int attackPower;
 //    public static int activeDamage = r.nextInt(10);
@@ -19,20 +21,27 @@ abstract public class Monsters {
     public static void loop(Hero hercules, Monsters activeMonster) {
         while (hercules.health > 0 && activeMonster.health > 0) {
             hercules.attack(activeMonster);
-            System.out.println(activeMonster + " has been hit.");
+            System.out.println(name + " has been hit.");
             if(activeMonster.health <= 0) {
+            	System.out.println(name + " was defeated!");
+//            	if the first monster dies, we want to rotate to the next one, rather than break.
+            	System.out.println("a " + name + " now comes to fight Hercules!");
                 break;
             }
-            System.out.println("Hercules score: " + hercules.health + " " + activeMonster + " score: " + activeMonster.health);
+            System.out.println("Hercules score: " + hercules.health + " " + name + " score: " + activeMonster.health);
             activeMonster.attack(hercules);
             System.out.println("Hercules has been hit.");
-            System.out.println("Hercules score: " + hercules.health + " " + activeMonster + " score: " + activeMonster.health);
+            if(hercules.health <= 0) {
+            	System.out.println("Hercules was defeated!");
+            	break;
+            }
+            System.out.println("Hercules score: " + hercules.health + " " + name + " score: " + activeMonster.health);
         }
-        if(activeMonster.health <= 0) {
-            System.out.println(activeMonster + " was defeated!");
-        } else {
-            System.out.println("Hercules was defeated!");
-        }
+//        if(activeMonster.health <= 0) {
+//            System.out.println(name + " was defeated!");
+//        } else {
+//            System.out.println("Hercules was defeated!");
+//        }
     }
     
     public static void main(String[] args) {
@@ -43,6 +52,13 @@ abstract public class Monsters {
         creatures[1] = new Ogre();
         creatures[2] = new Goblin();
         Monsters activeMonster = creatures[Monsters.r.nextInt(3)];
+        if(Monsters.r.nextInt(3) == 0) {
+            name = "Rat";
+        } else if(Monsters.r.nextInt(3) == 1) {
+            name = "Ogre";
+        } else {
+            name = "Goblin";
+        }
 //        System.out.println(activeMonster);
 //        System.out.println(activeDamage);
 //        System.out.println(hercules.health);
@@ -55,11 +71,6 @@ abstract public class Monsters {
 }
 
 class Rat extends Monsters {
-//    int health = 10;
-    
-//    public int getHealth() {
-//        return health;
-//    }
     
     public boolean isAlive(int health) {
         if(this.health > 0) {
@@ -82,7 +93,6 @@ class Rat extends Monsters {
 }
 
 class Ogre extends Monsters {
-    int health = 10;
     
     public boolean isAlive(int health) {
         return true;
@@ -99,7 +109,6 @@ class Ogre extends Monsters {
 }
 
 class Goblin extends Monsters {
-    int health = 10;
     
     public boolean isAlive(int health) {
         return true;
