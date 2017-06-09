@@ -18,31 +18,31 @@ abstract public class Monsters {
     abstract public void takeDamage(int damage);
     abstract public void attack(Monsters lt);
     
-    public static void loop(Hero hercules, Monsters activeMonster) {
-        while (hercules.health > 0 && activeMonster.health > 0) {
-            hercules.attack(activeMonster);
-            System.out.println(name + " has been hit.");
-            if(activeMonster.health <= 0) {
-            	System.out.println(name + " was defeated!");
-//            	if the first monster dies, we want to rotate to the next one, rather than break.
-            	System.out.println("a " + name + " now comes to fight Hercules!");
-                break;
-            }
-            System.out.println("Hercules score: " + hercules.health + " " + name + " score: " + activeMonster.health);
-            activeMonster.attack(hercules);
-            System.out.println("Hercules has been hit.");
-            if(hercules.health <= 0) {
-            	System.out.println("Hercules was defeated!");
-            	break;
-            }
-            System.out.println("Hercules score: " + hercules.health + " " + name + " score: " + activeMonster.health);
-        }
-//        if(activeMonster.health <= 0) {
-//            System.out.println(name + " was defeated!");
-//        } else {
-//            System.out.println("Hercules was defeated!");
+//    public static void combat(Hero hercules, Monsters activeMonster) {
+//        while (hercules.health > 0 && activeMonster.health > 0) {
+//            hercules.attack(activeMonster);
+//            System.out.println(name + " has been hit.");
+//            if(activeMonster.health <= 0) {
+//            	System.out.println(name + " was defeated!");
+////            	if the first monster dies, we want to rotate to the next one, rather than break.
+//            	System.out.println("a " + name + " now comes to fight Hercules!");
+//                break;
+//            }
+//            System.out.println("Hercules score: " + hercules.health + " " + name + " score: " + activeMonster.health);
+//            activeMonster.attack(hercules);
+//            System.out.println("Hercules has been hit.");
+//            if(hercules.health <= 0) {
+//            	System.out.println("Hercules was defeated!");
+//            	break;
+//            }
+//            System.out.println("Hercules score: " + hercules.health + " " + name + " score: " + activeMonster.health);
 //        }
-    }
+////        if(activeMonster.health <= 0) {
+////            System.out.println(name + " was defeated!");
+////        } else {
+////            System.out.println("Hercules was defeated!");
+////        }
+//    }
     
     public static void main(String[] args) {
         Hero hercules = new Hero();
@@ -51,21 +51,17 @@ abstract public class Monsters {
         creatures[0] = new Rat();
         creatures[1] = new Ogre();
         creatures[2] = new Goblin();
-        Monsters activeMonster = creatures[Monsters.r.nextInt(3)];
-        if(Monsters.r.nextInt(3) == 0) {
-            name = "Rat";
-        } else if(Monsters.r.nextInt(3) == 1) {
-            name = "Ogre";
-        } else {
-            name = "Goblin";
-        }
+//        return hercules.fight(creatures);
+        System.out.println(hercules.fight(creatures));
+        //Monsters activeMonster = creatures[Monsters.r.nextInt(3)];
+
 //        System.out.println(activeMonster);
 //        System.out.println(activeDamage);
 //        System.out.println(hercules.health);
 //        System.out.println(creatures[0].health);
 //        System.out.println(new Rat().health);
 //        creatures[0].takeDamage(activeDamage);
-        Monsters.loop(hercules, activeMonster);
+        //Monsters.loop(hercules);
     }
 
 }
@@ -127,9 +123,60 @@ class Goblin extends Monsters {
 class Hero extends Monsters {
     int health = 10;
     
-    public void fight(Monsters activeMonster) {
-        
+    public String fight(Monsters[] monsters) {
+    	String returnString = "";
+    	boolean heroWins = true;
+    	for (int i = 0; i < monsters.length; i++) {
+    		combat(this, monsters[i]);	
+    		if (!(this.isAlive(this.health))) {
+    			heroWins = false;
+    		}
+    	}
+    	if (heroWins) {
+    	returnString = "Hercules wins!";
+    	} else {
+    		returnString =  "he died";
+    	}
+    	return returnString;
     }
+    
+    public void combat(Hero hercules, Monsters activeMonster) {
+        while (hercules.health > 0 && activeMonster.health > 0) {
+            hercules.attack(activeMonster);
+            System.out.println(activeMonster.getClass().getName() + " has been hit.");
+            if(activeMonster.health <= 0) {
+            	System.out.println(activeMonster.getClass().getName() + " was defeated!");
+//            	if the first monster dies, we want to rotate to the next one, rather than break.
+//            	System.out.println("a " + activeMonster.getClass().getName() + " now comes to fight Hercules!");
+                break;
+            }
+            System.out.println("Hercules score: " + hercules.health + " " + activeMonster.getClass().getName() + " score: " + activeMonster.health);
+            activeMonster.attack(hercules);
+            System.out.println("Hercules has been hit.");
+            if(hercules.health <= 0) {
+            	System.out.println("Hercules was defeated!");
+            	break;
+            }
+            System.out.println("Hercules score: " + hercules.health + " " + activeMonster.getClass().getName() + " score: " + activeMonster.health);
+        }
+//        if(activeMonster.health <= 0) {
+//            System.out.println(name + " was defeated!");
+//        } else {
+//            System.out.println("Hercules was defeated!");
+//        }
+    }
+    
+   
+//    public boolean combat(Monsters m, Hero h) {
+//        if(Monsters.r.nextInt(3) == 0) {
+//            name = "Rat";
+//        } else if(Monsters.r.nextInt(3) == 1) {
+//            name = "Ogre";
+//        } else {
+//            name = "Goblin";
+//        }
+
+//    }
     
     public boolean isAlive(int health) {
         if(health > 0) {
